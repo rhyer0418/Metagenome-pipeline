@@ -5,9 +5,18 @@
     # Operation System: Ubuntu 20.04.6 LTS (GNU/Linux 5.4.0-196-generic x86_64)
 
 db=~/db
-
+cd 
+tmux new -s MetaPhlAn4
+tmux attach -t MetaPhlAn4
 
 ## Read-based (HUMAnN3+MetaPhlAn4 && Kraken2+Bracken)
+## using MetaPhlAn v4 please use the database vJun23
+wget http://cmprod1.cibio.unitn.it/biobakery4/metaphlan_databases/mpa_vJun23_CHOCOPhlAnSGB_202403.tar  # 3.1G
+wget -c http://cmprod1.cibio.unitn.it/biobakery4/metaphlan_databases/bowtie2_indexes/mpa_vJun23_CHOCOPhlAnSGB_202403_bt2.tar #21G
+
+tar xvf mpa_vJun23_CHOCOPhlAnSGB_202403.tar
+tar xvf mpa_vJun23_CHOCOPhlAnSGB_202403_bt2.tar
+
 ### step 1：
 
 tmux attach -t kraken_job
@@ -44,7 +53,7 @@ humann_config
 
   tail -n+2 result/metadata.txt | cut -f1 | /home/Database/liuye/db/EasyMicrobiome/linux/rush -j 2 \
       "humann --input temp/concat/{1}.fq  \
-      --output temp/humann3/ --threads 32 --metaphlan-options '--bowtie2db /home/Database/liuye/db/metaphlan4 --index mpa_vOct22_CHOCOPhlAnSGB_202403 --offline'" 
+      --output temp/humann3/ --threads 32 --metaphlan-options '--bowtie2db /home/Database/liuye/db/metaphlan4 --index mpa_vJun23_CHOCOPhlAnSGB_202403 --offline'" 
 
 # move important result files
     for i in $(tail -n+2 result/metadata.txt | cut -f1); do  
